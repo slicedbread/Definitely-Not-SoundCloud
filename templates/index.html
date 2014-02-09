@@ -12,12 +12,12 @@
   <div style="text-align: center">
     <div id="presets"></div>
     <div id="custom-area">
-	    <p><textarea id="text"></textarea> 
-      <button id="go" type="submit">Go!</button>
+	    <p><textarea id="text", style=" display:none"></textarea> 
+      <button id="go" type="submit" >Lyricize!</button>
     </div>
   </div>
 
-    <h2>It is the year <span id="slider3text">0</span></h2>
+    <h2>It is the year <span id="slider3text">1950</span></h2>
     <div id="slider3">
     </div>
 
@@ -59,16 +59,15 @@
 <script type = "text/javascript" src={{url_for('static', filename="mojo.js") }}></script>
 <script>
 	d3.select('#slider3').call(d3.slider().axis(true).min(1940).max(2005).step(1).value(1950).on("slide", function(evt, value) {
-      d3.select('#slider3text').text(value);
-      $.getJSON('./songs/' + value, function(data){
-	      $('#text').text(data['year'])
-	      console.log($('#text').value)
-	      console.log(data)
+      		d3.select('#slider3text').text(value);
+      		$.getJSON('./songs/' + value, function(data){
+	      		$('#text').val('');
+	      		$('#text').val(data['year'])
       }); 
     }));
     $('#form').on('submit', function(evt, value) {
-	d3.select('#text').text();
-	console.log($('#text').value)
+	//d3.select('#text').text();
+	console.log($('#text').val())
 	console.log('Called back!')
 });
 

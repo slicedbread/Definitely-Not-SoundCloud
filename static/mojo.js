@@ -22,6 +22,7 @@ var layout = d3.layout.cloud()
     .on("word", progress)
     .on("end", draw);
 
+
 var svg = d3.select("#vis").append("svg")
     .attr("width", w)
     .attr("height", h);
@@ -35,8 +36,12 @@ d3.select("#download-png").on("click", downloadPNG);
 
 d3.select(window).on("hashchange", hashchange);
 
-wordwords = ['Hello', 'Goodbye','Goodbye','Goodbye','Goodbye','Goodbye','Goodbye','Goodbye','Goodbye','Goodbye','Goodbye']
-
+//wordwords = ['Hello', 'Goodbye','Goodbye','Goodbye','Goodbye','Goodbye','Goodbye','Goodbye','Goodbye','Goodbye','Goodbye']
+/*
+var form = d3.select("#slider3")
+	.on("slide", function(value) {
+});
+*/
 var form = d3.select("#form")
     .on("submit", function() {
 	    console.log('Form submitted!');
@@ -48,7 +53,6 @@ var form = d3.select("#form")
 form.selectAll("input[type=number]")
     .on("click.refresh", function() {
       if (this.value === this.defaultValue) return;
-      console.log("Let's generate!");
       generate();
       this.defaultValue = this.value;
     });
@@ -125,6 +129,7 @@ function parseText(text) {
 }
 
 function generate() {
+	$('#text').empty()
   layout
      .font(d3.select("#font").property("value"))
       .spiral(d3.select("input[name=spiral]:checked").property("value"));

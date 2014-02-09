@@ -1,21 +1,30 @@
-import pymongo
+import sqlite3
+import json
 
-class DB:
-	
-	def __init__(self):
-		self.client = pymongo.MongoClient()
-		self.db = self.client.database
-		self.songs = self.db.songs
+def insert_song(title, artist, year, lyrics): 
+	conn = sqlite3.connect('lyrics.db')
+	lyrical_string = str(lyrics)
+	conn.execute("INSERT INTO songs(Title, Artist, Year, Lyrics) VALUES (?, ?, ?, ?)", (title, artist, year, lyrical_string),)
+	conn.commit()
+	if conn:
+		conn.close()
 
-	def insert_song(self, song_obj): 
-		song_id = self.users.insert(song_obj)
-		return song_id
+def get_lyrics_by_title(title): # Retrieves the class of a particular suggestion
+	conn = sqlite3.connect('lyrics.db')
+	cur = conn.cursor()
+	cur.execute("SELECT Lyrics FROM songs WHERE Title = ?", [title])
+	classified = cur.fetchone()
+	if conn: 
+		conn.close()
+	return classified
 
-	def list_all(self):
-		return self.db.collection_names()
-	
-	def get_song(self, song_name):
-		return self.songs.find_one({"name": song_name})
+def get_lyrics_by_year(year):
+	conn = sqlite3.connect('lyrics.db')
+	cur = conn.cursor()
+	cur.execute("SELECT Lyrics FROM songs WHERE Year = ?", [year])
+	lyric_sum = cur.fetchall()
+	cleanedup = [str(elem[0]) for elem in lyric_sum]
+	if conn:
+		conn.close()
+	return cleanedup
 
-	def get_all_songs(self):
-		return self.songs.find()
