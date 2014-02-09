@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Word Cloud Generator</title>
+
+<link href="{{ url_for ('static', filename='cloud.css' ) }}", rel="stylesheet">
+
+<div id="vis"></div>
+
+<form id="form">
+  <p style="position: absolute; right: 0; top: 0" id="status"></p>
+  <div style="text-align: center">
+    <div id="presets"></div>
+    <div id="custom-area">
+	    <p><textarea id="text"></textarea> 
+      <button id="go" type="submit">Go!</button>
+    </div>
+  </div>
+
+    <h2>It is the year <span id="slider3text">0</span></h2>
+    <div id="slider3">
+    </div>
+
+<hr>
+
+<div style="float: right; text-align: right; display: none">
+  <p><label for="max">Number of words:</label> <input type="number" value="250" min="1" id="max">
+  <p><label for="per-line"><input type="checkbox" id="per-line"> One word per line</label>
+  <p><label>Download:</label>
+    <a id="download-svg" href="#" target="_blank">SVG</a> |
+    <a id="download-png" href="#" target="_blank">PNG</a>
+</div>
+
+<div style="display: none">
+  <p><label>Spiral:</label>
+    <label for="archimedean"><input type="radio" name="spiral" id="archimedean" value="archimedean" checked="checked"> Archimedean</label>
+    <label for="rectangular"><input type="radio" name="spiral" id="rectangular" value="rectangular"> Rectangular</label>
+  <p><label for="scale">Scale:</label>
+    <label for="scale-log"><input type="radio" name="scale" id="scale-log" value="log" checked="checked"> log n</label>
+    <label for="scale-sqrt"><input type="radio" name="scale" id="scale-sqrt" value="sqrt"> √n</label>
+    <label for="scale-linear"><input type="radio" name="scale" id="scale-linear" value="linear"> n</label>
+  <p><label for="font">Font:</label> <input type="text" id="font" value="Impact">
+</div>
+
+<div id="angles" style="display: none">
+  <p><input type="number" id="angle-count" value="5" min="1"> <label for="angle-count">orientations</label>
+    <label for="angle-from">from</label> <input type="number" id="angle-from" value="-60" min="-90" max="90"> °
+    <label for="angle-to">to</label> <input type="number" id="angle-to" value="60" min="-90" max="90"> °
+</div>
+
+<hr style="clear: both">
+
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type = "text/javascript"  src={{url_for('static', filename="d3.min.js") }}></script>
+<script src="https://www.jasondavies.com/unicode.js"></script>
+<script type = "text/javascript" src={{url_for('static', filename="d3.layout.cloud.js") }}></script>
+<script type = "text/javascript" src={{url_for('static', filename="slider.js") }}></script>
+<script type = "text/javascript" src={{url_for('static', filename="mojo.js") }}></script>
+<script>
+	d3.select('#slider3').call(d3.slider().axis(true).min(1940).max(2005).step(1).value(1950).on("slide", function(evt, value) {
+      d3.select('#slider3text').text(value);
+      $.getJSON('./songs/' + value, function(data){
+	      $('#text').text(data['year'])
+	      console.log($('#text').value)
+	      console.log(data)
+      }); 
+    }));
+    $('#form').on('submit', function(evt, value) {
+	d3.select('#text').text();
+	console.log($('#text').value)
+	console.log('Called back!')
+});
+
+
+    
+  </script>
